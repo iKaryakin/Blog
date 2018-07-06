@@ -1,23 +1,154 @@
-<h1>Listing articles</h1>
- 
-<%= link_to 'New article', new_article_path %>
 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Text</th>
-    <th></th>
-  </tr>
- 
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head >
+
+<%= csrf_meta_tag %>
+<%= javascript_tag "var AUTH_TOKEN = '#{form_authenticity_token}';" if protect_against_forgery? %>
+
+<div class="container-fluid text-center"> 
+  <br>
+    <h1>Listing articles</h1>
+    <%= button_to 'New article', new_article_path, method: "get", class: "btn btn-outline-dark" %> 
+  </br>
+</div>
+
+<div class="container">
   <% @articles.each do |article| %>
-    <tr>
-      <td><%= article.title %></td>
-      <td><%= article.text %></td>
-      <td><%= link_to 'Show', article_path(article) %></td>
-      <td><%= link_to 'Edit', edit_article_path(article) %></td>
-      <td><%= link_to 'Destroy', article_path(article),
-          method: :delete,
-          data: { confirm: 'Are you sure?' } %></td>
-    </tr>
+    <div class="row">
+      <div class="col-lg-3 col-md-6 col-xs-6 bg-warning">Title
+        <div class="row">
+          <div class="col-12 bg-light "><%= article.title %></div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 col-xs-6 bg-warning">Text
+        <div class="row">
+          <div class="col-12 bg-light "><%= article.text %></div>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-4 col-4 bg-info"><%= button_to 'Show',
+          article_path(article), method: "get", class: "btn btn-primary" %>
+      </div>
+      <div class="col-lg-2 col-md-4 col-4 bg-info"><%= button_to 'Edit',
+          edit_article_path(article), method: "get", class: "btn btn-success" %>
+      </div>
+      <div class="col-lg-2 col-md-4 col-4 bg-info"><%= button_to 'Destroy',
+          article_path(article), class: "btn btn-danger",
+                  method: :delete,
+                  data: { confirm: 'Are you sure?' } %>
+      </div>
+      
+    </div>
   <% end %>
-</table>
+</div>
+<br> 
+  <div class="container text-center"> 
+    <%= paginate @articles %>
+  </div>
+</br>
+
+
+<!--</div> -->
+<!--
+<div class="container">
+  <div class="row ">
+    <div class="col-lg-3 col-md-6 col-xs-6 bg-warning">
+      col-8
+      <div class="row">
+        <div class="col-12  bg-warning">col-6</div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-xs-6 bg-success">col-4
+      <div class="row">
+        <div class="col-12  bg-succes">col-6</div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-4 col-4 bg-light">col-4
+      <div class="row">
+        <div class="col-12  bg-light">col-6</div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-4 col-4 bg-light">col-4
+      <div class="row">
+        <div class="col-12  bg-light">col-6</div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-md-4 col-4 bg-light">col-4
+      <div class="row">
+        <div class="col-12  bg-light">col-6</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% @articles.each do |article| %>
+      <div class="row">
+        <div class="col-xs-6 col-sm-6"><%= article.title %></div>
+        <div class="col-xs-6 col-sm-6 "><%= article.text %></div>
+        <div class="col-xs col-sm-2"><%= button_to 'Show', article_path(article),
+          method: "get", class: "btn btn-primary" %></div>
+        <div class="col-xs col-sm-2"><%= button_to 'Edit', edit_article_path(article),
+          method: "get", class: "btn btn-info" %></div>
+        <div class="col-xs col-sm-2"><%= button_to 'Destroy', article_path(article), class: "btn btn-danger",
+                method: :delete,
+                data: { confirm: 'Are you sure?' } %></div>
+      </div>
+    <% end %>
+-->
+
+<div id="content" class="container-fluid bg-1 text-center"> 
+  <h1>Listing articles with JS</h1>
+  <div class="container text-center"> 
+    <%= paginate @articles %>
+  </div>
+  <script>
+    var articles_json = <%= @articles_json.html_safe %>;
+    console.log(articles_json);
+
+    for (var i = 0; i < articles_json.length; i+= 1) {
+      var idiv = document.createElement("div");
+      idiv.id = "div" + i;
+      document.body.appendChild(idiv);
+
+      var h = document.createElement("H3")
+      var t = document.createTextNode(articles_json[i].title);
+      h.appendChild(t);
+      document.getElementById("content").appendChild(h)
+      
+      var para = document.createElement("P");
+      var t = document.createTextNode(articles_json[i].text);
+      para.appendChild(t);
+      para.classList.toggle("text-danger")
+      document.getElementById("content").appendChild(para)
+
+      var x = document.createElement("a");
+      x.innerHTML = "Show ";
+      x.href = "/articles/" + articles_json[i].slug;
+      document.getElementById("content").appendChild(x)
+
+      var e = document.createElement("a");
+      e.innerHTML = "Edit ";
+      e.href = "/articles/" + articles_json[i].slug + "/edit";
+      e.classList.toggle("btn")
+      document.getElementById("content").appendChild(e)
+
+      var d = document.createElement("a");
+      d.id = "delete" + i;
+      d.classList.toggle("destroy");
+      d.href = "/articles/" + articles_json[i].slug;
+      d.innerHTML = "Destroy ";
+      d.data = "";
+      document.getElementById("content").appendChild(d)
+
+      }
+
+  </script>
+
+  <script> 
+    $.ajax({
+          url: "index",
+          dataType: "script"
+        });
+  </script>
+  
+  </div>

@@ -1,0 +1,12 @@
+console.log("Hello world");
+$('.destroy').click(function(event){
+    event.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: $(this).attr("href"),
+        data:"_method=" + "delete" +
+        "&authenticity_token=" + AUTH_TOKEN,
+        dataType: "script"
+    });
+});
+
