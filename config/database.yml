@@ -15,10 +15,14 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: app
   password: samolet1
-  socket: /var/run/mysqld/mysqld.sock
+  host: mysql
+  # host: 127.0.0.1
+  # port: 3306
+  # socket: /var/run/mysqld/mysqld.sock
 
 development:
   <<: *default
+  host: mysql
   database: blog_development
 
 # Warning: The database defined as "test" will be erased and
