@@ -1,7 +1,8 @@
 version: '3'
 services:
-  mysql:
+  db:
     image: mysql:5.7.22
+    command: ['--character-set-server=utf8', '--collation-server=utf8_unicode_ci']
     environment:
       MYSQL_ROOT_PASSWORD: 4kyjt4ap
       MYSQL_DATABASE: blog_development
@@ -9,10 +10,16 @@ services:
       MYSQL_PASSWORD: samolet1
   web:
     build: .
-    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    
+    # entrypoint: ./wait-for-it.sh db:3306 -t 60 --
+    entrypoint: ["docker-entrypoint.sh"]
     volumes:
       - .:/app
     ports:
       - "4000:4000"
-    links:
-      - "mysql"
+    depends_on:
+      - db
+    command: bundle exec rails s -p 4000 -b '0.0.0.0'
+    
+
+    
