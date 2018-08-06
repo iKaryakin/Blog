@@ -1,3 +1,11 @@
+<!-- 
+<form>
+  <label>Say something</label> <br>
+  <input type="text" data-behavior="comment_speaker">
+</form> 
+-->
+
+
 <p>
   <strong>Title:</strong>
   <%= @article.title %>
@@ -9,7 +17,10 @@
 </p>
 
 <h2>Comments</h2>
-<%= render @article.comments %>
+<div data-article-id="<%= @article.id %>" > </div>
+<div id="comments" data-channel="comments" >
+  <%= render @article.comments %>
+</div>
 
 <h2>Add a comment:</h2>
 <%= render 'comments/form' %>

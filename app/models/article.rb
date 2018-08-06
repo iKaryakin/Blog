@@ -8,4 +8,5 @@ class Article < ApplicationRecord
     validates :title, presence: true,
     length: { minimum: 5 }
     validates :slug, uniqueness: true
+    # validates :text, presence: true
 end

@@ -1,0 +1,7 @@
+<script>
+    var comment_commenter = <%= comment.commenter %>
+    var comment_body = <%= comment.body %>
+    var comment_id = <%= comment.id %>
+
+    Document.getElementById(comment_id).value = comment_commenter;
+</script>
